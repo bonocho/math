@@ -144,13 +144,16 @@
         function checkAnswer() {
             let userAnswer = document.getElementById("userAnswer").value.trim();
             
+            // 현재 시간을 기준으로 타이머 시작
+            if (!timer) {
+                startTimer();
+            }
+
             // 사용자가 입력한 답이 비어있는 경우 처리
             if (userAnswer === "") {
                 alert("정답을 입력하세요.");
                 return;
             }
-
-            stopTimer(); // 시간 정지
 
             // 현재 문제의 정답
             let correctAnswer = questions[currentQuestionIndex].answer;
@@ -168,7 +171,6 @@
             currentQuestionIndex++;
             if (currentQuestionIndex < questions.length) {
                 showQuestion(); // 다음 문제 표시
-                startTimer(); // 다음 문제 시간 시작
             } else {
                 // 모든 문제를 풀었을 경우 최종 점수 출력
                 setTimeout(() => {
@@ -184,13 +186,13 @@
             document.getElementById("question").innerHTML = `문제 ${currentQuestionIndex + 1}: ${questions[currentQuestionIndex].question}`;
             document.getElementById("userAnswer").value = "";
             document.getElementById("result").innerHTML = "";
-            startTimer();
         }
 
         // 초기화 함수
         function init() {
             generateQuestions();
             showQuestion();
+            startTimer(); // 초기 로딩 시 타이머 시작
         }
 
         // 페이지 로드 시 초기화 함수 호출
