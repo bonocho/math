@@ -26,6 +26,12 @@
         .timer {
             font-size: 1rem;
             color: red;
+            margin-bottom: 10px;
+        }
+        .time-left {
+            font-size: 2rem;
+            font-weight: bold;
+            color: red;
         }
         input[type="text"] {
             padding: 8px;
@@ -54,7 +60,7 @@
     <div class="quiz-container">
         <h1>산술 퀴즈</h1>
         <div id="question" class="question"></div>
-        <div class="timer">남은 시간: <span id="timer">30</span>초</div>
+        <div class="timer">남은 시간: <span id="time-left" class="time-left">30</span>초</div>
         <input type="text" id="userAnswer" placeholder="정답 입력">
         <button onclick="checkAnswer()">정답 확인</button>
         <p id="result"></p>
@@ -68,9 +74,9 @@
         let timer;
         let timeLeft;
 
-        // 문제 데이터 생성 함수
+        // 문제 데이터 생성 함수 (덧셈, 뺄셈, 곱셈만 포함)
         function generateQuestions() {
-            const operators = ['+', '-', '*', '/'];
+            const operators = ['+', '-', '*'];
             for (let i = 0; i < 10; i++) {
                 let num1 = Math.floor(Math.random() * 100) + 10;
                 let num2 = Math.floor(Math.random() * 100) + 10;
@@ -81,11 +87,11 @@
                 let op3 = operators[Math.floor(Math.random() * operators.length)];
                 
                 let questionText = `${num1} ${op1} ${num2} ${op2} ${num3} ${op3} ${num4}`;
-                let correctAnswer = eval(questionText.replace('/', '//'));
+                let correctAnswer = eval(questionText);
 
                 questions.push({
                     question: questionText,
-                    answer: Math.floor(correctAnswer)
+                    answer: correctAnswer
                 });
             }
         }
@@ -111,7 +117,7 @@
 
         // 시간 표시 업데이트 함수
         function updateTimerDisplay() {
-            document.getElementById("timer").innerText = timeLeft;
+            document.getElementById("time-left").innerText = timeLeft;
         }
 
         // 시간 초과 처리 함수
