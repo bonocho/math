@@ -74,9 +74,9 @@
         let timer;
         let timeLeft;
 
-        // 문제 데이터 생성 함수 (덧셈, 뺄셈, 곱셈, 로그함수, 지수함수 포함)
+        // 문제 데이터 생성 함수 (덧셈, 뺄셈, 곱셈)
         function generateQuestions() {
-            const operators = ['+', '-', '*', 'log', 'exp'];
+            const operators = ['+', '-', '*'];
             for (let i = 0; i < 10; i++) {
                 let num1 = Math.floor(Math.random() * 100) + 10;
                 let num2 = Math.floor(Math.random() * 100) + 10;
