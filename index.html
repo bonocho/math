@@ -74,9 +74,9 @@
         let timer;
         let timeLeft;
 
-        // 문제 데이터 생성 함수 (덧셈, 뺄셈, 곱셈만 포함)
+        // 문제 데이터 생성 함수 (덧셈, 뺄셈, 곱셈, 로그함수, 지수함수 포함)
         function generateQuestions() {
-            const operators = ['+', '-', '*'];
+            const operators = ['+', '-', '*', 'log', 'exp'];
             for (let i = 0; i < 10; i++) {
                 let num1 = Math.floor(Math.random() * 100) + 10;
                 let num2 = Math.floor(Math.random() * 100) + 10;
@@ -89,6 +89,9 @@
                 let questionText = `${num1} ${op1} ${num2} ${op2} ${num3} ${op3} ${num4}`;
                 let correctAnswer = eval(questionText);
 
+                // 정수값으로 변환
+                correctAnswer = Math.round(correctAnswer);
+
                 questions.push({
                     question: questionText,
                     answer: correctAnswer
@@ -98,7 +101,7 @@
 
         // 타이머 시작 함수
         function startTimer() {
-            timeLeft = 60;
+            timeLeft = 30;
             updateTimerDisplay();
             timer = setInterval(() => {
                 timeLeft--;
@@ -152,12 +155,12 @@
             let correctAnswer = questions[currentQuestionIndex].answer;
             
             // 사용자가 입력한 답과 정답 비교
-            if (parseInt(userAnswer) === correctAnswer) {
+            if (parseFloat(userAnswer) === correctAnswer) {
                 score += 3; // 맞춘 경우 +3점
                 document.getElementById("result").innerHTML = `정답입니다! (+3점) <br> 현재 점수: ${score}점`;
             } else {
                 score += 1; // 틀린 경우 +1점
-                document.getElementById("result").innerHTML = `아쉽네요. 정답은 ${correctAnswer}입니다. (+1점) <br> 현재 점수: ${score}점`;
+                document.getElementById("result").innerHTML = `틀렸습니다. 정답은 ${correctAnswer}입니다. (+1점) <br> 현재 점수: ${score}점`;
             }
 
             // 다음 문제로 진행
@@ -172,6 +175,8 @@
                     document.getElementsByTagName("button")[0].style.display = "none";
                 }, 2000); // 2초 후에 최종 결과 표시
             }
+
+            startTimer(); // 정답 확인 후 다음 문제 시간 시작
         }
 
         // 문제 출력 함수
