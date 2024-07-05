@@ -101,7 +101,7 @@
 
         // 타이머 시작 함수
         function startTimer() {
-            timeLeft = 60;
+            timeLeft = 30;
             updateTimerDisplay();
             timer = setInterval(() => {
                 timeLeft--;
@@ -144,12 +144,14 @@
         function checkAnswer() {
             let userAnswer = document.getElementById("userAnswer").value.trim();
             
+            stopTimer(); // 시간 정지
+
+            // 정답을 입력하지 않은 경우 처리
             if (userAnswer === "") {
                 alert("정답을 입력하세요.");
+                startTimer(); // 시간 다시 시작
                 return;
             }
-            
-            stopTimer(); // 시간 정지
 
             // 현재 문제의 정답
             let correctAnswer = questions[currentQuestionIndex].answer;
