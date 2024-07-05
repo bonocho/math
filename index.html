@@ -140,14 +140,14 @@
         // 정답 확인 함수
         function checkAnswer() {
             let userAnswer = document.getElementById("userAnswer").value.trim();
-            stopTimer();
-
+            
             if (userAnswer === "") {
                 alert("정답을 입력하세요.");
-                startTimer();
                 return;
             }
             
+            stopTimer(); // 시간 정지
+
             // 현재 문제의 정답
             let correctAnswer = questions[currentQuestionIndex].answer;
             
