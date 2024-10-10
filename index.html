@@ -78,7 +78,6 @@
         let score = 0;
         let timer;
         let timeLeft;
-        let quizType;
 
         // 산술 퀴즈 데이터 생성 함수
         function generateArithmeticQuestions() {
@@ -97,7 +96,7 @@
                 if (Math.abs(correctAnswer) < 1000) { // 세 자릿수 이내일 경우만 추가
                     questions.push({
                         question: questionText,
-                        answer: correctAnswer
+                        answer: correctAnswer.toString() // 정답을 문자열로 저장
                     });
                 }
             }
@@ -120,7 +119,7 @@
 
                 questions.push({
                     question: questionText,
-                    answer: correctAnswer
+                    answer: correctAnswer // 정답은 문자열로 저장
                 });
             }
         }
@@ -213,7 +212,6 @@
 
         // 산술 퀴즈 시작 함수
         function startArithmeticQuiz() {
-            quizType = 'arithmetic';
             document.getElementById("quiz-selection").style.display = "none";
             document.getElementById("quiz-container").style.display = "block";
             generateArithmeticQuestions();
@@ -222,7 +220,6 @@
 
         // 도함수 퀴즈 시작 함수
         function startDerivativeQuiz() {
-            quizType = 'derivative';
             document.getElementById("quiz-selection").style.display = "none";
             document.getElementById("quiz-container").style.display = "block";
             generateDerivativeQuestions();
