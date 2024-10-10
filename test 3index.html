@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arithmetic Quiz</title>
+    <title>산술 퀴즈 및 도함수 퀴즈</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -57,37 +57,59 @@
     </style>
 </head>
 <body>
-    <div class="quiz-container">
-        <h1>사칙연산 퀴즈</h1>
+    <div class="quiz-container" id="quiz-selection">
+        <h1>퀴즈 유형 선택</h1>
+        <button onclick="startArithmeticQuiz()">산술 퀴즈 시작</button>
+        <button onclick="startDerivativeQuiz()">도함수 퀴즈 시작</button>
+    </div>
+
+    <div class="quiz-container" id="quiz-container" style="display: none;">
+        <h1>퀴즈</h1>
         <div id="question" class="question"></div>
-        <div class="timer">남은 시간: <span id="time-left" class="time-left">30</span>초</div>
+        <div class="timer">남은 시간: <span id="time-left" class="time-left">60</span>초</div>
         <input type="text" id="userAnswer" placeholder="정답 입력">
         <button onclick="checkAnswer()">정답 확인</button>
         <p id="result"></p>
     </div>
 
     <script>
-        // 문제 및 정답 관련 데이터
         let questions = [];
         let currentQuestionIndex = 0;
         let score = 0;
         let timer;
         let timeLeft;
+        let quizType;
 
-        // 문제 데이터 생성 함수 (덧셈, 뺄셈, 곱셈, 로그함수, 지수함수 포함)
-        function generateQuestions() {
-            const operators = ['+', '-', '*', 'log', 'exp'];
-            for (let i = 0; i < 10; i++) {
-                let num1 = Math.floor(Math.random() * 100) + 10;
-                let num2 = Math.floor(Math.random() * 100) + 10;
-                let num3 = Math.floor(Math.random() * 100) + 10;
-                let num4 = Math.floor(Math.random() * 100) + 10;
-                let op1 = operators[Math.floor(Math.random() * operators.length)];
-                let op2 = operators[Math.floor(Math.random() * operators.length)];
-                let op3 = operators[Math.floor(Math.random() * operators.length)];
+        // 산술 퀴즈 데이터 생성 함수
+        function generateArithmeticQuestions() {
+            const operators = ['+', '-', '*'];
+            questions = [];
+            while (questions.length < 10) {
+                let num1 = Math.floor(Math.random() * 90) + 10; // 10에서 99 사이의 숫자
+                let num2 = Math.floor(Math.random() * 90) + 10;
+                let op = operators[Math.floor(Math.random() * operators.length)];
                 
-                let questionText = `${num1} ${op1} ${num2} ${op2} ${num3} ${op3} ${num4}`;
-                let correctAnswer = calculateExpression(num1, op1, num2, op2, num3, op3, num4);
+                let questionText = `${num1} ${op} ${num2}`;
+                let correctAnswer = eval(questionText);
+
+                if (correctAnswer < 1000) { // 세 자릿수 이내일 경우만 추가
+                    questions.push({
+                        question: questionText,
+                        answer: correctAnswer
+                    });
+                }
+            }
+        }
+
+        // 도함수 퀴즈 데이터 생성 함수
+        function generateDerivativeQuestions() {
+            const powers = [2, 3, 4];
+            questions = [];
+            for (let i = 0; i < 10; i++) {
+                let power = powers[Math.floor(Math.random() * powers.length)];
+                let coefficient = Math.floor(Math.random() * 9) + 1; // 1에서 9 사이의 숫자
+                let questionText = `f(x) = ${coefficient}x^${power}, f'(x) = ?`;
+                let correctAnswer = `${coefficient * power}x^${power - 1}`;
 
                 questions.push({
                     question: questionText,
@@ -96,29 +118,9 @@
             }
         }
 
-        // 표현식 계산 함수
-        function calculateExpression(num1, op1, num2, op2, num3, op3, num4) {
-            let result1 = calculate(num1, op1, num2);
-            let result2 = calculate(result1, op2, num3);
-            let finalResult = calculate(result2, op3, num4);
-            return finalResult;
-        }
-
-        // 개별 연산 함수
-        function calculate(a, operator, b) {
-            switch (operator) {
-                case '+': return a + b;
-                case '-': return a - b;
-                case '*': return a * b;
-                case 'log': return Math.round(Math.log10(a)); // 로그 계산
-                case 'exp': return Math.round(Math.pow(2, a)); // 지수 계산
-                default: return NaN;
-            }
-        }
-
         // 타이머 시작 함수
         function startTimer() {
-            timeLeft = 30;
+            timeLeft = 60;
             updateTimerDisplay();
             timer = setInterval(() => {
                 timeLeft--;
@@ -161,7 +163,7 @@
         function checkAnswer() {
             let userAnswer = document.getElementById("userAnswer").value.trim();
             
-            if (isNaN(userAnswer) || userAnswer === "") {
+            if (userAnswer === "") {
                 alert("정답을 입력하세요.");
                 return;
             }
@@ -172,7 +174,7 @@
             let correctAnswer = questions[currentQuestionIndex].answer;
             
             // 사용자가 입력한 답과 정답 비교
-            if (parseInt(userAnswer) === correctAnswer) {
+            if (userAnswer === correctAnswer) {
                 score += 3; // 맞춘 경우 +3점
                 document.getElementById("result").innerHTML = `정답입니다! (+3점) <br> 현재 점수: ${score}점`;
             } else {
@@ -202,14 +204,23 @@
             startTimer();
         }
 
-        // 초기화 함수
-        function init() {
-            generateQuestions();
+        // 산술 퀴즈 시작 함수
+        function startArithmeticQuiz() {
+            quizType = 'arithmetic';
+            document.getElementById("quiz-selection").style.display = "none";
+            document.getElementById("quiz-container").style.display = "block";
+            generateArithmeticQuestions();
             showQuestion();
         }
 
-        // 페이지 로드 시 초기화 함수 호출
-        window.onload = init;
+        // 도함수 퀴즈 시작 함수
+        function startDerivativeQuiz() {
+            quizType = 'derivative';
+            document.getElementById("quiz-selection").style.display = "none";
+            document.getElementById("quiz-container").style.display = "block";
+            generateDerivativeQuestions();
+            showQuestion();
+        }
     </script>
 </body>
 </html>
