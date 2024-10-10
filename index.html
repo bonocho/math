@@ -181,7 +181,7 @@
             let correctAnswer = questions[currentQuestionIndex].answer;
             
             // 사용자가 입력한 답과 정답 비교
-            if (parseFloat(userAnswer) === correctAnswer) {
+            if (userAnswer === correctAnswer) {
                 score += 3; // 맞춘 경우 +3점
                 document.getElementById("result").innerHTML = `정답입니다! (+3점) <br> 현재 점수: ${score}점`;
             } else {
